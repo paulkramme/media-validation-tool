@@ -47,9 +47,14 @@ def scandirectory(walk_dir, scanfile, verbose = False):
 					break
 				else:
 					#file_path = os.path.join(root, filename)
-					file_path = root + "/" + filename
+					if os.name == "posix":
+						file_path = root + "/" + filename
+					elif os.name == "nt":
+						file_path = root + "\\" + filename
+					else:
+						pass
 					checksum = crc(os.path.join(root, filename))
-					current_scan.extend([f"{file_path},{checksum},\n"])
+					current_scan.extend([file_path + "," + checksum + ",\n"])
 		with open(scanfile, "w") as current_scan_file:
 			current_scan_file.writelines(current_scan)			
 	except FileNotFoundError:
