@@ -46,7 +46,6 @@ def scandirectory(walk_dir, scanfile, verbose = False):
 				if filename == "media-validation-tool" or filename == "media.csv" or filename == "media-validation-tool.py" or filename == "." or filename == "..":
 					break
 				else:
-					#file_path = os.path.join(root, filename)
 					if os.name == "posix":
 						file_path = root + "/" + filename
 					elif os.name == "nt":
@@ -59,7 +58,7 @@ def scandirectory(walk_dir, scanfile, verbose = False):
 			current_scan_file.writelines(current_scan)			
 	except FileNotFoundError:
 		if verbose == True:
-			print(color.FAIL + "SCAN ERROR: FILE NOT FOUND" + color.ENDC)
+			print("SCAN ERROR: FILE NOT FOUND")
 
 def validate(path = ".", verifile = "./media.csv"):
 	print("Validating " + path)
@@ -74,16 +73,14 @@ def validate(path = ".", verifile = "./media.csv"):
 	for line in fnewarray:
 		splitline = split(line, ",")
 		if line in foldarray:
-			print(color.OKGREEN + "SUCCESS " + color.ENDC + splitline[0])
+			print("SUCCESS " + splitline[0])
 		else:
-			break
-			print(color.FAIL + "WRONG HASH " + color.ENDC + splitline[0])
-			ffalsehash.extend(line)
+			pass
 	for line in foldarray:
 		splitline = split(line, ",")
 		if not line in fnewarray:
 			if line not in ffalsehash:
-				print(color.FAIL + "MISSING OR HASH FAIL " + color.ENDC + splitline[0])
+				print("MISSING OR HASH FAIL " + splitline[0])
 			else:
 				pass
 
