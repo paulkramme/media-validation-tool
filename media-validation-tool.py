@@ -46,7 +46,6 @@ def scandirectory(walk_dir, scanfile, verbose = False):
 				if filename == "media-validation-tool" or filename == "media.csv" or filename == "media-validation-tool.py" or filename == "." or filename == "..":
 					break
 				else:
-					#file_path = os.path.join(root, filename)
 					if os.name == "posix":
 						file_path = root + "/" + filename
 					elif os.name == "nt":
@@ -59,7 +58,7 @@ def scandirectory(walk_dir, scanfile, verbose = False):
 			current_scan_file.writelines(current_scan)			
 	except FileNotFoundError:
 		if verbose == True:
-			print(color.FAIL + "SCAN ERROR: FILE NOT FOUND" + color.ENDC)
+			print("SCAN ERROR: FILE NOT FOUND")
 
 def validate(path = ".", verifile = "./media.csv"):
 	print("Validating " + path)
@@ -70,16 +69,6 @@ def validate(path = ".", verifile = "./media.csv"):
 	fnew = open("media.csv.1", "r")
 	foldarray = fold.readlines()
 	fnewarray = fnew.readlines()
-	"""
-	for line in fnewarray:
-		splitline = split(line, ",")
-		if line in foldarray:
-			print(color.OKGREEN + "SUCCESS " + color.ENDC + splitline[0])
-		else:
-			break
-			print(color.FAIL + "WRONG HASH " + color.ENDC + splitline[0])
-			ffalsehash.extend(line)
-	"""
 	errorcount = 0
 	successcount = 0
 	for line in foldarray:
@@ -91,6 +80,9 @@ def validate(path = ".", verifile = "./media.csv"):
 			print(color.OKGREEN + "SUCCESS " + color.ENDC + splitline[0])
 			successcount = successcount + 1
 	print(color.BOLD, errorcount, "errors in", successcount + errorcount, "files", color.ENDC)
+	fold.close()
+	fnew.close()
+	os.remove("media.csv.1")
 
 def create(path = ".", verifile = "./media.csv"):
 	print("Creating media file...")
