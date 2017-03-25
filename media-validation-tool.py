@@ -1,5 +1,7 @@
 #(C) 2017 Paul Kramme
 
+show_success = True
+
 import zlib
 import sys
 import os
@@ -74,12 +76,13 @@ def validate(path = ".", verifile = "./media.csv"):
 	for line in foldarray:
 		splitline = split(line, ",")
 		if not line in fnewarray:
-			print(color.FAIL + "ERROR   " + color.ENDC + splitline[0])
+			print("* ERROR " + splitline[0])
 			errorcount = errorcount + 1
 		else:
-			print(color.OKGREEN + "SUCCESS " + color.ENDC + splitline[0])
+			if show_success == True:
+				print("SUCCESS " + splitline[0])
 			successcount = successcount + 1
-	print(color.BOLD, errorcount, "errors in", successcount + errorcount, "files", color.ENDC)
+	print(errorcount, "errors in", successcount + errorcount, "files")
 	fold.close()
 	fnew.close()
 	os.remove("media.csv.1")
