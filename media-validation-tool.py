@@ -70,7 +70,7 @@ def validate(path = ".", verifile = "./media.csv"):
 	fnew = open("media.csv.1", "r")
 	foldarray = fold.readlines()
 	fnewarray = fnew.readlines()
-	ffalsehash = []
+	"""
 	for line in fnewarray:
 		splitline = split(line, ",")
 		if line in foldarray:
@@ -79,13 +79,18 @@ def validate(path = ".", verifile = "./media.csv"):
 			break
 			print(color.FAIL + "WRONG HASH " + color.ENDC + splitline[0])
 			ffalsehash.extend(line)
+	"""
+	errorcount = 0
+	successcount = 0
 	for line in foldarray:
 		splitline = split(line, ",")
 		if not line in fnewarray:
-			if line not in ffalsehash:
-				print(color.FAIL + "MISSING OR HASH FAIL " + color.ENDC + splitline[0])
-			else:
-				pass
+			print(color.FAIL + "ERROR   " + color.ENDC + splitline[0])
+			errorcount = errorcount + 1
+		else:
+			print(color.OKGREEN + "SUCCESS " + color.ENDC + splitline[0])
+			successcount = successcount + 1
+	print(color.BOLD, errorcount, "errors in", successcount + errorcount, "files", color.ENDC)
 
 def create(path = ".", verifile = "./media.csv"):
 	print("Creating media file...")
@@ -96,7 +101,7 @@ def main():
 	print("(C) 2017 Paul Kramme")
 	if len(sys.argv) < 2:
 		validate()
-		input()
+		input("Press ENTER to continue...")
 	else:
 		create()
 	
