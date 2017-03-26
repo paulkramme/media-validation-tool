@@ -1,4 +1,5 @@
-#(C) 2017 Paul Kramme
+#!/usr/bin/python3
+# Copyright (C) 2017 Paul Kramme
 
 show_success = True
 
@@ -104,4 +105,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
