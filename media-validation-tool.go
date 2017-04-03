@@ -84,14 +84,17 @@ func main() {
     if err != nil {
          panic(err)
     }
-    for path, _ := range old_data {
+    var errorcount int = 0
+    for path, hash := range old_data {
          if val, ok := table[path]; ok {
-              if val == table[path] {
+              if val == hash {
                    fmt.Printf("SUCCESS %s\n", path)
               } else {
-                   fmt.Println("Fail.")
+                   fmt.Printf("FAIL %s\n", path)
+                   errorcount++
               }
          }
     }
+    fmt.Println(errorcount, "Error(s)")
   }
 }
