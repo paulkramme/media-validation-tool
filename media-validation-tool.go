@@ -96,5 +96,7 @@ func main() {
          }
     }
     fmt.Println(errorcount, "Error(s)")
+    buf := bufio.NewReader(os.Stdin)
+    buf.ReadBytes('\n')
   }
 }
