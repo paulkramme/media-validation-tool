@@ -7,10 +7,11 @@ import (
   "path/filepath";
   "io";
   "crypto/md5";
-  "encoding/hex"
-)
+  "bufio";
+  "strings";
+  "encoding/hex";
 
-//type WalkCallb func(path string, info os.FileInfo, err error) error
+)
 
 func md5sum(filePath string) (result string, err error) {
   file, err := os.Open(filePath)
@@ -29,15 +30,15 @@ func md5sum(filePath string) (result string, err error) {
   return
 }
 
-func scanfiles(location string) (m map[int]string, err error) {
+func scanfiles(location string) (m map[string]string, err error) {
+  m = make(map[string]string)
   var walkcallback = func(path string, fileinfo os.FileInfo, inputerror error) (err error) {
     checksum,_ := md5sum(path)
-    fmt.Println(path, checksum)
+    m[path] = checksum
     return
   }
-  var something map[int]string
   err = filepath.Walk(location, walkcallback)
-  return something, err
+  return
 }
 
 func main() {
@@ -47,9 +48,50 @@ func main() {
   if len(os.Args) > 1 {
     if os.Args[1] == "create" {
       fmt.Println("\n:: Creating media record for current directory\n")
-      scanfiles(".")
+      table, err := scanfiles(".")
+      if err != nil {
+        fmt.Println("Error during scan...")
+      }
+      //open file
+      f, fileopenerror := os.Create("./media_record.csv")
+      if fileopenerror != nil {
+        panic(fileopenerror)
+      }
+      for path, hash := range table {
+        if table[path] != "" {
+          fmt.Fprintf(f, "%s,%s\n", path, hash)
+        }
+      }
     } else {
       fmt.Println("Invalid argument:", os.Args[1])
+    }
+  } else {
+    fmt.Println("Checking file integrity")
+    table, err := scanfiles(".")
+    if err != nil {
+      fmt.Println("Error during scan...")
+    }
+    fmt.Println("Checking against media_record.csv")
+    file, _ := os.Open("./media_record.csv")
+    scanner := bufio.NewScanner(file) //read lines
+    old_data := make(map[string]string)
+    for scanner.Scan() {
+         splitted_string := strings.Split(scanner.Text(), ",")
+         if splitted_string[1] != "" {
+              old_data[splitted_string[0]] = splitted_string[1]
+         }
+    }
+    if err != nil {
+         panic(err)
+    }
+    for path, _ := range old_data {
+         if val, ok := table[path]; ok {
+              if val == table[path] {
+                   fmt.Printf("SUCCESS %s\n", path)
+              } else {
+                   fmt.Println("Fail.")
+              }
+         }
     }
   }
 }
