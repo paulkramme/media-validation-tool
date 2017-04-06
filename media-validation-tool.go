@@ -94,7 +94,10 @@ func main() {
                fmt.Println("Error during scan...")
           }
           fmt.Println("Checking against media_record.csv")
-          file, _ := os.Open("./media_record.csv")
+          file, err := os.Open("./media_record.csv")
+          if err != nil {
+               panic(err)
+          }
           scanner := bufio.NewScanner(file) //read lines
           old_data := make(map[string]string)
           for scanner.Scan() {
