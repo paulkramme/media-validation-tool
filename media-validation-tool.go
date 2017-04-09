@@ -121,13 +121,8 @@ func main() {
 			}
 		}
 
-		if errorcount != 0 {
-			if errorcount == 1 {
-				fmt.Println(errorcount, "Error")
-			} else {
-				fmt.Println(errorcount, "Errors")
-			}
-		}
+		fmt.Println(errorcount, "Error(s)")
+
 		buf := bufio.NewReader(os.Stdin)
 		buf.ReadBytes('\n')
 	}
