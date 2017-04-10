@@ -106,9 +106,6 @@ func main() {
 				old_data[splitted_string[0]] = splitted_string[1]
 			}
 		}
-		if err != nil {
-			panic(err)
-		}
 		var errorcount int = 0
 		for path, hash := range old_data {
 			if val, ok := table[path]; ok {
