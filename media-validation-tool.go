@@ -25,14 +25,14 @@ SOFTWARE.
 package main
 
 import (
+	"bufio"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
-	"io"
-	"crypto/md5"
-	"bufio"
 	"strings"
-	"encoding/hex"
 )
 
 func md5sum(filePath string) (result string, err error) {
@@ -55,7 +55,7 @@ func md5sum(filePath string) (result string, err error) {
 func scanfiles(location string) (m map[string]string, err error) {
 	m = make(map[string]string)
 	var walkcallback = func(path string, fileinfo os.FileInfo, inputerror error) (err error) {
-		checksum,_ := md5sum(path)
+		checksum, _ := md5sum(path)
 		m[path] = checksum
 		return
 	}
